@@ -66,3 +66,12 @@ class SimpleFunction(Poset):
 
     def __le__(self, other):
         return self == self.min(other)
+
+def iter_approx(f, ll, ul, n):
+    for i in range(n):
+        x = ll + (ul-ll)*(i/n)
+        yield(f(x), x)
+    yield (0, ul)
+
+def approx(f, ll, ul, n):
+    return SimpleFunction.from_terms(iter_approx(f, ll, ul, n))
