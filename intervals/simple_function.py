@@ -1,5 +1,5 @@
-from ivl.algebra import IterAlgebra, Poset
-from ivl.iterable import iter_pwbin, iter_pwun
+from intervals.algebra import IterAlgebra, Poset
+from intervals.iterable import iter_pwbin, iter_pwun
 from math import inf
 
 class IterSimpleFunctionAlgebra(IterAlgebra):

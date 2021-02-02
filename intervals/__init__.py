@@ -1,2 +1,2 @@
-from intervals.simple import IterSimpleFunctionAlgebra, SimpleFunction
+from intervals.simple_function import IterSimpleFunctionAlgebra, SimpleFunction
 from intervals.intervals import Intervals

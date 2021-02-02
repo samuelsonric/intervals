@@ -1,4 +1,4 @@
-from intervals.simple_functions import IterSimpleFunctionAlgebra, SimpleFunction
+from intervals.simple_function import IterSimpleFunctionAlgebra, SimpleFunction
 from operator import not_
 from itertools import cycle, chain, islice
 from collections import deque
