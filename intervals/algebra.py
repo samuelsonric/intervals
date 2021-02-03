@@ -26,6 +26,9 @@ class IterGroup:
     def diff(self, x, y):
         yield from self.sum(x, self.neg(y))
 
+    def eq(self, x, y):
+        return all(i == j for i, j in zip(x, y))
+
 class IterVectorSpace(IterGroup):
     def neg(self, x):
         yield from self.smul(-1, x)
