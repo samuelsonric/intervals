@@ -1,7 +1,8 @@
 from intervals.simple_function import IterSimpleFunctionAlgebra, SimpleFunction
 from operator import not_
-from itertools import cycle, chain, islice
-from collections import deque
+from itertools import cycle, chain, islice, zip_longest
+from collections import deque, OrderedDict
+from math import inf
 
 def terms_of_endpoints(endpoints, ll, ul):
     i = next(endpoints, None)
@@ -23,6 +24,7 @@ class Intervals(SimpleFunction):
     @classmethod
     def from_terms(cls, terms):
         coef, ep = zip(*terms)
+        # coef, ep = zip(*self.alg.pwun(lambda x: bool(x), terms))
         return cls(coef[0], ep)
 
     @classmethod
@@ -40,8 +42,14 @@ class Intervals(SimpleFunction):
         yield from zip(cycle((self.parity, not self.parity)), self.endpoints)
 
     def iter_pairs(self):
-        ep = islice(self.endpoints, not self.parity, None)
-        yield from zip(ep, ep)
+        def f(x):
+            return x[0]
+        def m(x):
+            return x[1:]
+        yield from map(m, filter(f, self.alg.triples(self.iter_terms())))
+
+        #ep = islice(self.endpoints, not self.parity, None)
+        #yield from zip_longest(ep, ep, fillvalue = inf)
 
     def compl(self):
         return self.from_terms(self.alg.pwun(not_, self.iter_terms()))
@@ -58,3 +66,19 @@ class Intervals(SimpleFunction):
     def __repr__(self):
         n = 6
         return f"{type(self).__name__}({', '.join(map(str, islice(self.iter_pairs(), n)))})"
+        
+def composition_maps(coef, endpoints):
+    cf = OrderedDict()
+    fmap = []
+    imap = []
+    for n, p in enumerate(coef):
+        if p in cf:
+            i = cf[p]
+        else:
+            cf[p] = i = len(cf)
+            imap.append([])
+        fmap.append(i)
+        imap[i] += endpoints[n:n+2]
+    return (tuple(endpoints), tuple(cf), tuple(fmap), tuple(Intervals.from_endpoints(i, endpoints[0], inf) for i in imap))
+        
+
