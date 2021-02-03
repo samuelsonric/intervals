@@ -1,14 +1,14 @@
 from math import inf
 
 def iter_pwbin(op, x, y):
-    yield from iter_pw(pwbin(op, x, y))
+    yield from reduce_terms(pwbin(op, x, y))
 
 def iter_pwun(op, x):
-    yield from iter_pw(pwun(op, x))
+    yield from reduce_terms(pwun(op, x))
 
-def iter_pw(it):
+def reduce_terms(terms):
     p = None
-    for i in it:
+    for i in terms:
         if not p == i[0]:
             p = i[0]
             yield i

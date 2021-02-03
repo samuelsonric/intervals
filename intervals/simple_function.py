@@ -1,6 +1,7 @@
 from intervals.algebra import IterAlgebra, Poset
-from intervals.iterable import iter_pwbin, iter_pwun
+from intervals.iterable import iter_pwbin, iter_pwun, reduce_terms
 from math import inf
+from itertools import islice
 
 class IterSimpleFunctionAlgebra(IterAlgebra):
     def pwbin(self, op, x, y):
@@ -9,15 +10,16 @@ class IterSimpleFunctionAlgebra(IterAlgebra):
     def pwun(self, op, x):
         yield from iter_pwun(op, x)
 
-    def leb(self, x):
-        s = 0
+    def triples(self, x):
         i = next(x)
         for j in x:
-            s += i[0]*(j[1]-i[1])
-            i = j
-        if i[0]:
-            s += i[0]*inf
-        return s
+            yield (*i, (i := j)[1])
+        yield (*i, inf)
+
+    def leb(self, x):
+        def m(i):
+            return i[0] and i[0]*(i[2]-i[1])
+        return sum(map(m, self.triples(x)))
 
 class SimpleFunction(Poset):
     def __init__(self, terms):
@@ -62,10 +64,14 @@ class SimpleFunction(Poset):
         return self.alg.leb(self.iter_terms())
 
     def __eq__(self, other):
-        return self.terms == other.terms
+        return self.alg.eq(self.iter_terms(), other.iter_terms()) 
 
     def __le__(self, other):
         return self == self.min(other)
+
+    def __repr__(self):
+        n = 6
+        return f"{type(self).__name__}({', '.join(map(str, islice(self.alg.triples(self.iter_terms()), n)))})"
 
 def iter_approx(f, ll, ul, n):
     for i in range(n):
