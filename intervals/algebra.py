@@ -13,7 +13,7 @@ class Poset:
     def __lt__(self, other):
         return self <= other and not self == other
 
-    def gt(self, other):
+    def __gt__(self, other):
         return self >= other and not self == other
 
 class IterGroup:
