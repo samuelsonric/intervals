@@ -26,28 +26,32 @@ class SimpleFunction(Terms):
     def iter_terms(self):
         yield from zip(self.coef, self.endpoints)
 
-    def get_fmap(self):
-        return self.ccoef_fmap[1]
-
-    def get_ccoef(self):
-        return self.ccoef_fmap[0]
-
-    def get_imap(self):
-        return self.imap
-
     @cached_property
     def ccoef_fmap(self):
         return unique(self.coef, return_inverse=True)
+
+    @property
+    def fmap(self):
+        return self.ccoef_fmap[1]
+
+    @property
+    def ccoef(self):
+        return self.ccoef_fmap[0]
 
     @cached_property
     def imap(self):
         imap = {}
         for i in self.iter_triples():
             imap.setdefault(i[0], []).append(i[1:])
-        return tuple(map(Intervals.from_pairs, map(imap.__getitem__, self.get_ccoef())))
+        return tuple(map(Intervals.from_pairs, map(imap.__getitem__, self.ccoef)))
 
-    def set_coef(self, coef):
-        self.coef = array(coef)
+    @property
+    def coef(self):
+        return self._coef
+
+    @coef.setter
+    def coef(self, value):
+        self._coef = value
         if hasattr(self, 'ccoef_fmap'):
             del self.ccoef_fmap
         if hasattr(self, 'imap'):

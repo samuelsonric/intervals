@@ -12,22 +12,22 @@ class Composition:
 
     @classmethod
     def from_callable(cls, sfunc, fun=lambda x: x):
-        return cls.from_coef(sfunc, fromiter(map(fun, sfunc.get_ccoef()), float))
+        return cls.from_coef(sfunc, fromiter(map(fun, sfunc.ccoef), float64))
 
     def iter_terms(self):
-        yield from zip(map(self.coef.__getitem__, self.get_fmap()), self.get_endpoints())
+        yield from zip(map(self.coef.__getitem__, self.fmap), self.endpoints)
 
-    def get_endpoints(self):
+    @property
+    def endpoints(self):
         return self.sfunc.endpoints
 
-    def get_fmap(self):
-        return self.sfunc.get_fmap()
+    @property
+    def fmap(self):
+        return self.sfunc.fmap
 
-    def get_ccoef(self):
-        return self.sfunc.get_ccoef()
-
-    def get_imap(self):
-        return self.sfunc.get_imap()
+    @property
+    def imap(self):
+        return self.sfunc.imap
 
     def leb(self):
         return leb(self.iter_terms())
