@@ -30,7 +30,7 @@ class PushForward:
 
     @cached_property
     def push_forward(self):
-        return push_forward(self.measure, self.X.get_imap())
+        return push_forward(self.measure, self.X.imap)
 
     def __matmul__(self, x):
         return self.push_forward @ x.coef
@@ -43,7 +43,7 @@ class ConditionalExpectation:
 
     @cached_property
     def kernel(self):
-        return conditional_kernel(self.measure, self.X.get_imap(), self.Y.get_imap())
+        return conditional_kernel(self.measure, self.X.imap, self.Y.imap)
 
     def __matmul__(self, x):
         coef = self.kernel @ x.coef
