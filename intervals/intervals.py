@@ -1,11 +1,12 @@
-from intervals.simple_function import Terms
+from intervals.simple_function import IntegrableFunctionLattice
+from intervals.constants import MAX_REPR
 from itertools import cycle, chain, islice
 from collections import deque
 from math import inf
 from numpy import array, float64
 
 
-class Intervals(Terms):
+class Intervals(IntegrableFunctionLattice):
     def __init__(self, parity, endpoints):
         self.parity = bool(parity)
         self.endpoints = array(endpoints, float64)
@@ -48,8 +49,7 @@ class Intervals(Terms):
         return self.parity == other.parity and all(self.endpoints == other.endpoints)
 
     def __repr__(self):
-        n = 3
-        l = list(map(str, islice(self.iter_pairs(), n + 1)))
-        if len(l) == n + 1:
+        l = list(map(str, islice(self.iter_pairs(), MAX_REPR + 1)))
+        if len(l) == MAX_REPR + 1:
             l[-1] = "..."
         return f"{type(self).__name__}({', '.join(l)})"

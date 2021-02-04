@@ -1,13 +1,14 @@
-from intervals.terms import Terms
+from intervals.terms import IntegrableFunctionLattice
 from intervals.intervals import Intervals
 from intervals.iterable import approx
+from intervals.constants import MAX_REPR
 from numpy import unique, fromiter, array, float64
 from operator import mul, add, sub
 from functools import cached_property
-from itertools import islice
+from itertools import islice, cycle
 
 
-class SimpleFunction(Terms):
+class SimpleFunction(IntegrableFunctionLattice):
     def __init__(self, coef, endpoints):
         self.coef = array(coef, dtype=float64)
         self.endpoints = array(endpoints, dtype=float64)
@@ -22,7 +23,13 @@ class SimpleFunction(Terms):
 
     @classmethod
     def indicator(cls, intervals):
-        return cls.from_terms(intervals.iter_terms())
+        p = intervals.parity
+        return cls(
+            fromiter(
+                islice(cycle((p, not p)), len(intervals.endpoints)), dtype=float64
+            ),
+            intervals.endpoints,
+        )
 
     def iter_terms(self):
         yield from zip(self.coef, self.endpoints)
@@ -71,12 +78,10 @@ class SimpleFunction(Terms):
         return self.pointwise_binary(sub, other)
 
     def __repr__(self):
-        n = 3
-
         def to_str(i):
             return "{}*({}, {})".format(*i)
 
-        l = list(map(to_str, islice(self.iter_nonzero_triples(), n + 1)))
-        if len(l) == n + 1:
+        l = list(map(to_str, islice(self.iter_nonzero_triples(), MAX_REPR + 1)))
+        if len(l) == MAX_REPR + 1:
             l[-1] = "..."
         return f"{type(self).__name__}({' + '.join(l)})"

@@ -9,11 +9,7 @@ from intervals.iterable import (
 )
 
 
-class Terms(Poset):
-    @classmethod
-    def from_terms(cls, terms):
-        ...
-
+class IntegrableFunction:
     def iter_terms(self):
         ...
 
@@ -24,14 +20,6 @@ class Terms(Poset):
         filt = lambda x: x[0]
         yield from filter(filt, self.iter_triples())
 
-    def pointwise_unary(self, op):
-        return self.from_terms(pointwise_unary(op, self.iter_terms()))
-
-    def pointwise_binary(self, op, other):
-        return self.from_terms(
-            pointwise_binary(op, self.iter_terms(), other.iter_terms())
-        )
-
     def leb(self):
         return leb(self.iter_terms())
 
@@ -40,14 +28,28 @@ class Terms(Poset):
             if i[1] <= x < i[2]:
                 return i[0]
 
+    def __eq__(self, x):
+        return eq(self.iter_terms(), other.iter_terms())
+
+
+class IntegrableFunctionLattice(IntegrableFunction, Poset):
+    @classmethod
+    def from_terms(cls, terms):
+        ...
+
+    def pointwise_unary(self, op):
+        return self.from_terms(pointwise_unary(op, self.iter_terms()))
+
+    def pointwise_binary(self, op, other):
+        return self.from_terms(
+            pointwise_binary(op, self.iter_terms(), other.iter_terms())
+        )
+
     def __and__(self, other):
         return self.pointwise_binary(min, other)
 
     def __or__(self, other):
         return self.pointwise_binary(max, other)
-
-    def __eq__(self, other):
-        return eq(self.iter_terms(), other.iter_terms())
 
     def __le__(self, other):
         return self == self & other

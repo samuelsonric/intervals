@@ -1,9 +1,8 @@
-from intervals.iterable import leb
-from intervals.simple_function import SimpleFunction
+from intervals.terms import IntegrableFunction
 from numpy import unique, array, fromiter, maximum, minimum, float64
 
 
-class Composition:
+class Composition(IntegrableFunction):
     def __init__(self, sfunc, coef):
         self.sfunc = sfunc
         self.coef = array(coef, dtype=float64)
@@ -15,9 +14,6 @@ class Composition:
     @classmethod
     def from_callable(cls, sfunc, fun=lambda x: x):
         return cls.from_coef(sfunc, fromiter(map(fun, sfunc.ccoef), float64))
-
-    def to_simple_function(self):
-        return SimpleFunction.from_terms(self.iter_terms())
 
     def iter_terms(self):
         yield from zip(map(self.coef.__getitem__, self.fmap), self.endpoints)
@@ -33,9 +29,6 @@ class Composition:
     @property
     def imap(self):
         return self.sfunc.imap
-
-    def leb(self):
-        return leb(self.iter_terms())
 
     def __neg__(self):
         return self.from_coef(self.sfunc, -self.coef)

@@ -1,6 +1,7 @@
 from itertools import takewhile, dropwhile
 import matplotlib.pyplot as plt
 
+
 def get_bar_inputs(sfunc, start, stop):
     def mapper(i):
         return (i[0], i[1], i[2] - i[1])
