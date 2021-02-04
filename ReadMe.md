@@ -4,8 +4,8 @@
 ```
 from intervals import Intervals
 
-Intervals.from_pairs(((1, 3), (4, 7), (8, 9)))
-Intervals((0.0, 2.0), (3.0, 6.0), (7.0, 10.0))
+i = Intervals.from_pairs(((1, 3), (4, 7), (8, 9)))
+j = Intervals.from_pairs(((0, 2), (3, 6), (7, 10)))
 ```
 #### the union [1, 3) ∪ [4, 7) ∪ [8, 9)
 ```
