@@ -7,39 +7,39 @@ from intervals import Intervals
 Intervals.from_pairs(((1, 3), (4, 7), (8, 9)))
 Intervals((0.0, 2.0), (3.0, 6.0), (7.0, 10.0))
 ```
-the union [1, 3) ∪ [4, 7) ∪ [8, 9)
+#### the union [1, 3) ∪ [4, 7) ∪ [8, 9)
 ```
 >>> i
 Intervals((1.0, 3.0), (4.0, 7.0), (8.0, 9.0))
 ```
-the union [0, 2) ∪ [3, 6) ∪ [7, 10)
+#### the union [0, 2) ∪ [3, 6) ∪ [7, 10)
 ```
 >>> j
 Intervals((0.0, 2.0), (3.0, 6.0), (7.0, 10.0))
 
 ```
 ### Operations
-complementation
+#### complementation
 ```
 >>> ~i
 Intervals((-inf, 1.0), (3.0, 4.0), (7.0, 8.0), ...)
 ```
-intersection
+#### intersection
 ```
 >>> i & j
 Intervals((1.0, 2.0), (4.0, 6.0), (8.0, 9.0))
 ```
-inclusion
+#### inclusion
 ```
 >>> i & j <= i
 True
 ```
-membership
+#### membership
 ```
 >>> i(2)
 True
 ```
-measure
+#### measure
 ```
 >>> i.leb()
 6.0
