@@ -73,7 +73,7 @@ indicator of the union [1, 3) ∪ [4, 7) ∪ [8, 9)
 >>> x
 SimpleFunction(1.0*(1.0, 3.0) + 1.0*(4.0, 7.0) + 1.0*(8.0, 9.0))
 ```
-approximation of the function f: x ↦ x − 5
+approximation of the function x ↦ x − 5
 ```
 >>> y
 SimpleFunction(-5.0*(0.0, 2.0) + -3.0*(2.0, 4.0) + -1.0*(4.0, 6.0) + ...)
