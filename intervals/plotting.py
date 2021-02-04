@@ -17,7 +17,7 @@ def get_bar_inputs(sfunc, start, stop):
     x[0] = start
     width[0] = x[1] - start
     width[-1] = stop - x[-1]
-    print(x, height, width)
+
     return (x, height, width)
 
 
