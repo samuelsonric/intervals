@@ -99,13 +99,28 @@ difference
 >>> x - y
 SimpleFunction(5.0*(0.0, 1.0) + 6.0*(1.0, 2.0) + 4.0*(2.0, 3.0) + ...)
 ```
-minimum
+pointwise minimum
 ```
 >>> x & y
 SimpleFunction(-5.0*(0.0, 2.0) + -3.0*(2.0, 4.0) + -1.0*(4.0, 6.0) + ...)
 ```
-maximum
+pointwise maximum
 ```
 >>> x | y
 SimpleFunction(1.0*(1.0, 3.0) + 1.0*(4.0, 8.0) + 3.0*(8.0, 10.0))
+```
+pointwise order
+```
+>>> x & y <= x
+True
+```
+evaluation
+```
+>>> x(2)
+1.0
+```
+integration
+```
+>>> x.leb()
+6.0
 ```
