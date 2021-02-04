@@ -29,21 +29,6 @@ intersection
 >>> i & j
 Intervals((1.0, 2.0), (4.0, 6.0), (8.0, 9.0))
 ```
-union
-```
->>> i | j
-Intervals((0.0, 10.0))
-```
-difference
-```
->>> i - j
-Intervals((2.0, 3.0), (6.0, 7.0))
-```
-symmetric difference
-```
->>> i ^ j
-Intervals((0.0, 1.0), (2.0, 4.0), (6.0, 8.0), ...)
-```
 inclusion
 ```
 >>> i & j <= i
@@ -63,6 +48,7 @@ measure
 ### Initialization
 ```
 from intervals import Intervals, SimpleFunction
+from intervals.plotting import plot_sfuncs
 
 i = Intervals.from_pairs(((1, 3), (4, 7), (8, 9)))
 x = SimpleFunction.indicator(i)
@@ -70,45 +56,35 @@ y = SimpleFunction.approx(fun=lambda x: x-5, start=0, stop=10, num_steps=5)
 ```
 indicator of the union [1, 3) ∪ [4, 7) ∪ [8, 9)
 ```
->>> x
+>>> plot_sfuncs(x, xlim=(0, 10), ylim=(-6, 6))
 SimpleFunction(1.0*(1.0, 3.0) + 1.0*(4.0, 7.0) + 1.0*(8.0, 9.0))
 ```
+![x](x.png)
 approximation of the function x ↦ x − 5
 ```
 >>> y
 SimpleFunction(-5.0*(0.0, 2.0) + -3.0*(2.0, 4.0) + -1.0*(4.0, 6.0) + ...)
 ```
+![y](y.png)
 ### Operations
-negation
-```
->>> -x
-SimpleFunction(-1.0*(1.0, 3.0) + -1.0*(4.0, 7.0) + -1.0*(8.0, 9.0))
-```
 multiplication
 ```
 >>> x * y
 SimpleFunction(-5.0*(1.0, 2.0) + -3.0*(2.0, 3.0) + -1.0*(4.0, 6.0) + ...)
 ```
+![multiplication](mul.png)
 addition
 ```
 >>> x + y
 SimpleFunction(-5.0*(0.0, 1.0) + -4.0*(1.0, 2.0) + -2.0*(2.0, 3.0) + ...)
 ```
-difference
-```
->>> x - y
-SimpleFunction(5.0*(0.0, 1.0) + 6.0*(1.0, 2.0) + 4.0*(2.0, 3.0) + ...)
-```
+![addition](add.png)
 pointwise minimum
 ```
 >>> x & y
 SimpleFunction(-5.0*(0.0, 2.0) + -3.0*(2.0, 4.0) + -1.0*(4.0, 6.0) + ...)
 ```
-pointwise maximum
-```
->>> x | y
-SimpleFunction(1.0*(1.0, 3.0) + 1.0*(4.0, 8.0) + 3.0*(8.0, 10.0))
-```
+![pointwise minimum](min.png)
 pointwise order
 ```
 >>> x & y <= x
