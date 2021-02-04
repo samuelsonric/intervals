@@ -7,12 +7,12 @@ from intervals import Intervals
 Intervals.from_pairs(((1, 3), (4, 7), (8, 9)))
 Intervals((0.0, 2.0), (3.0, 6.0), (7.0, 10.0))
 ```
-the union [1, 3) U [4, 7) U [8, 9)
+the union [1, 3) ∪ [4, 7) ∪ [8, 9)
 ```
 >>> i
 Intervals((1.0, 3.0), (4.0, 7.0), (8.0, 9.0))
 ```
-the union [0, 2) U [3, 6) U [7, 10)
+the union [0, 2) ∪ [3, 6) ∪ [7, 10)
 ```
 >>> j
 Intervals((0.0, 2.0), (3.0, 6.0), (7.0, 10.0))
@@ -68,12 +68,12 @@ i = Intervals.from_pairs(((1, 3), (4, 7), (8, 9)))
 x = SimpleFunction.indicator(i)
 y = SimpleFunction.approx(fun=lambda x: x-5, start=0, stop=10, num_steps=5)
 ```
-indicator of the union [1, 3) U [4, 7) U [8, 9)
+indicator of the union [1, 3) ∪ [4, 7) ∪ [8, 9)
 ```
 >>> x
 SimpleFunction(1.0*(1.0, 3.0) + 1.0*(4.0, 7.0) + 1.0*(8.0, 9.0))
 ```
-approximation of the function f(x) = x-5
+approximation of the function f: x ↦ x − 5
 ```
 >>> y
 SimpleFunction(-5.0*(0.0, 2.0) + -3.0*(2.0, 4.0) + -1.0*(4.0, 6.0) + ...)
