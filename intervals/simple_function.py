@@ -19,6 +19,10 @@ class SimpleFunction(Terms):
     def approx(cls, fun, start, stop, num_steps):
         return cls.from_terms(approx(fun, start, stop, num_steps))
 
+    @classmethod
+    def indicator(cls, intervals):
+        return cls.from_terms(intervals.iter_terms())
+
     def iter_terms(self):
         yield from zip(self.coef, self.endpoints)
 
@@ -64,5 +68,5 @@ class SimpleFunction(Terms):
     def __repr__(self):
         n = 6
         def to_str(i):
-            return '{}: ({}, {})'.format(*i)
-        return f"{type(self).__name__}({', '.join(map(to_str, islice(self.iter_triples(), n)))})"
+            return '{}*({}, {})'.format(*i)
+        return f"{type(self).__name__}({' + '.join(map(to_str, islice(self.iter_nonzero_triples(), n)))})"

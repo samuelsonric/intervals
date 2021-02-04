@@ -1,5 +1,6 @@
 from math import inf
 from itertools import zip_longest
+from numpy import linspace
 
 def eq(x, y):
     return all(i == j for i, j in zip_longest(x, y))
@@ -61,7 +62,6 @@ def graph_of_fun(fun):
     return lambda x: (fun(x), x)
 
 def approx_0(fun, start, stop, num_steps):
-    step = (stop - start) / num_steps
     yield (0, -inf)
-    yield from map(graph_of_fun(fun), range(start, stop, step))
+    yield from map(graph_of_fun(fun), linspace(start, stop, num_steps, endpoint=False))
     yield (0, stop)

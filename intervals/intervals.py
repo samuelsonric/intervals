@@ -32,11 +32,7 @@ class Intervals(Terms):
         yield from zip(cycle((p, not p)), self.endpoints)
 
     def iter_pairs(self):
-        def filt(x):
-            return x[0]
-        def mapper(x):
-            return x[1:]
-        yield from map(mapper, filter(filt, self.iter_triples()))
+        yield from map(lambda x: x[1:], self.iter_nonzero_triples())
 
     def __invert__(self):
         return type(self)(not self.parity, self.endpoints)
