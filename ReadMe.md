@@ -48,7 +48,6 @@ True
 ### Initialization
 ```
 from intervals import Intervals, SimpleFunction
-from intervals.plotting import plot_sfuncs
 
 i = Intervals.from_pairs(((1, 3), (4, 7), (8, 9)))
 x = SimpleFunction.indicator(i)
@@ -56,9 +55,10 @@ y = SimpleFunction.approx(fun=lambda x: x-5, start=0, stop=10, num_steps=5)
 ```
 #### indicator of the union [1, 3) ∪ [4, 7) ∪ [8, 9)
 ```
->>> plot_sfuncs(x, xlim=(0, 10), ylim=(-6, 6))
+>>> x
 SimpleFunction(1.0*(1.0, 3.0) + 1.0*(4.0, 7.0) + 1.0*(8.0, 9.0))
 ```
+
 ![x](x.png)
 #### approximation of the function x ↦ x − 5
 ```
