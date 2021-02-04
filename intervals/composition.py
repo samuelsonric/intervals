@@ -1,8 +1,9 @@
 from intervals.terms import IntegrableFunction
+from intervals.algebra import Poset
 from numpy import unique, array, fromiter, maximum, minimum, float64
 
 
-class Composition(IntegrableFunction):
+class Composition(IntegrableFunction, Poset):
     def __init__(self, sfunc, coef):
         self.sfunc = sfunc
         self.coef = array(coef, dtype=float64)
@@ -34,25 +35,32 @@ class Composition(IntegrableFunction):
         return self.from_coef(self.sfunc, -self.coef)
 
     def __add__(self, other):
-        return self.from_coef(self.sfunc, self.coef + other.coef)
+        if isinstance(other, type(self)):
+            return self.from_coef(self.sfunc, self.coef + other.coef)
+        return other + self
 
     def __sub__(self, other):
-        return self.from_coef(self.sfunc, self.coef - other.coef)
+        if isinstance(other, type(self)):
+            return self.from_coef(self.sfunc, self.coef - other.coef)
+        return -other + self
 
     def __mul__(self, other):
-        return self.from_coef(self.sfunc, self.coef * other.coef)
+        if isinstance(other, type(self)):
+            return self.from_coef(self.sfunc, self.coef * other.coef)
+        return other * self
 
     def __or__(self, other):
-        return self.from_coef(self.sfunc, maximum(self.coef, other.coef))
+        if isinstance(other, type(self)):
+            return self.from_coef(self.sfunc, maximum(self.coef, other.coef))
+        return other | self
 
     def __and__(self, other):
-        return self.from_coef(self.sfunc, minimum(self.coef, other.coef))
-
-    def __eq__(self, other):
-        return self.coef == other.coef
+        if isinstance(other, type(self)):
+            return self.from_coef(self.sfunc, minimum(self.coef, other.coef))
+        return other & self
 
     def __le__(self, other):
-        return all(self.coef <= other.coef)
+        return self == self & other
 
-    def __lt__(self, other):
-        return all(self.coef < other.coef)
+    def __repr__(self):
+        return f'{type(self).__name__}({repr(self.coef)})'
