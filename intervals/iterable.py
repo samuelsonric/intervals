@@ -1,19 +1,38 @@
 from math import inf
+from itertools import zip_longest
 
-def iter_pwbin(op, x, y):
-    yield from reduce_terms(pwbin(op, x, y))
+def eq(x, y):
+    return all(i == j for i, j in zip_longest(x, y))
 
-def iter_pwun(op, x):
-    yield from reduce_terms(pwun(op, x))
+def triples(x):
+    i = next(x)
+    for j in x:
+        yield (*i, (i := j)[1])
+    yield (*i, inf)
 
-def reduce_terms(terms):
+def leb_of_triple(i):
+    return i[0] and i[0]*(i[2]-i[1])
+
+def leb(x):
+    return sum(map(leb_of_triple, triples(x)))
+
+def reduce_terms(x):
     p = None
-    for i in terms:
+    for i in x:
         if not p == i[0]:
             p = i[0]
             yield i
 
-def pwbin(op, x, y):
+def pointwise_binary(op, x, y):
+    yield from reduce_terms(pointwise_binary_0(op, x, y))
+
+def pointwise_unary(op, x):
+    yield from reduce_terms(pointwise_unary_0(op, x))
+
+def approx(fun, start, stop, num_steps):
+    yield from reduce_terms(approx_0(fun, start, stop, num_steps))
+
+def pointwise_binary_0(op, x, y):
     i = next(x)
     j = next(y)
     sentinel = (0, inf)
@@ -34,6 +53,15 @@ def pwbin(op, x, y):
             i = next(x, sentinel)
             j = next(y, sentinel)
 
-def pwun(op, x):
+def pointwise_unary_0(op, x):
     for i in x:
         yield (op(i[0]), i[1])
+
+def graph_of_fun(fun):
+    return lambda x: (fun(x), x)
+
+def approx_0(fun, start, stop, num_steps):
+    step = (stop - start) / num_steps
+    yield (0, -inf)
+    yield from map(graph_of_fun(fun), range(start, stop, step))
+    yield (0, stop)

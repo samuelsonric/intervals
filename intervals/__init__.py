@@ -1,3 +1,4 @@
-from intervals.simple_function import IterSimpleFunctionAlgebra, SimpleFunction, iter_approx, approx
+from intervals.simple_function import SimpleFunction
 from intervals.intervals import Intervals
-from intervals.measure import SignedMeasure
+from intervals.measure import SignedMeasure, PushForward, ConditionalExpectation
+from intervals.composition import Composition
