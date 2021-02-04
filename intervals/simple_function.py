@@ -66,7 +66,10 @@ class SimpleFunction(Terms):
         return self.pointwise_binary(sub, other)
 
     def __repr__(self):
-        n = 6
+        n = 3
         def to_str(i):
             return '{}*({}, {})'.format(*i)
-        return f"{type(self).__name__}({' + '.join(map(to_str, islice(self.iter_nonzero_triples(), n)))})"
+        l = list(map(to_str, islice(self.iter_nonzero_triples(), n+1)))
+        if len(l) == n+1:
+            l[-1] = '...'
+        return f"{type(self).__name__}({' + '.join(l)})"

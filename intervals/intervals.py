@@ -47,5 +47,8 @@ class Intervals(Terms):
         return self.parity == other.parity and all(self.endpoints == other.endpoints)
 
     def __repr__(self):
-        n = 6
-        return f"{type(self).__name__}({', '.join(map(str, islice(self.iter_pairs(), n)))})"
+        n = 3
+        l = list(map(str, islice(self.iter_pairs(), n+1)))
+        if len(l) == n+1:
+            l[-1] = '...'
+        return f"{type(self).__name__}({', '.join(l)})"
