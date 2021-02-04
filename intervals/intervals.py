@@ -4,6 +4,7 @@ from collections import deque
 from math import inf
 from numpy import array, float64
 
+
 class Intervals(Terms):
     def __init__(self, parity, endpoints):
         self.parity = bool(parity)
@@ -22,7 +23,7 @@ class Intervals(Terms):
         if ep[-1] == inf:
             ep.pop()
         return cls(p, ep)
- 
+
     @classmethod
     def from_pairs(cls, pairs):
         return cls.from_endpoints(chain.from_iterable(pairs))
@@ -48,7 +49,7 @@ class Intervals(Terms):
 
     def __repr__(self):
         n = 3
-        l = list(map(str, islice(self.iter_pairs(), n+1)))
-        if len(l) == n+1:
-            l[-1] = '...'
+        l = list(map(str, islice(self.iter_pairs(), n + 1)))
+        if len(l) == n + 1:
+            l[-1] = "..."
         return f"{type(self).__name__}({', '.join(l)})"

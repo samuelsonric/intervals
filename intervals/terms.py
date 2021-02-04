@@ -1,5 +1,13 @@
 from intervals.algebra import Poset
-from intervals.iterable import pointwise_binary, pointwise_unary, reduce_terms, triples, leb, eq
+from intervals.iterable import (
+    pointwise_binary,
+    pointwise_unary,
+    reduce_terms,
+    triples,
+    leb,
+    eq,
+)
+
 
 class Terms(Poset):
     @classmethod
@@ -20,7 +28,9 @@ class Terms(Poset):
         return self.from_terms(pointwise_unary(op, self.iter_terms()))
 
     def pointwise_binary(self, op, other):
-        return self.from_terms(pointwise_binary(op, self.iter_terms(), other.iter_terms()))
+        return self.from_terms(
+            pointwise_binary(op, self.iter_terms(), other.iter_terms())
+        )
 
     def leb(self):
         return leb(self.iter_terms())

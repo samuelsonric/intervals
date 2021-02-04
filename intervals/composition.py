@@ -2,6 +2,7 @@ from intervals.iterable import leb
 from intervals.simple_function import SimpleFunction
 from numpy import unique, array, fromiter, maximum, minimum, float64
 
+
 class Composition:
     def __init__(self, sfunc, coef):
         self.sfunc = sfunc

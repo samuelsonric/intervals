@@ -6,6 +6,7 @@ from operator import mul, add, sub
 from functools import cached_property
 from itertools import islice
 
+
 class SimpleFunction(Terms):
     def __init__(self, coef, endpoints):
         self.coef = array(coef, dtype=float64)
@@ -52,9 +53,9 @@ class SimpleFunction(Terms):
     @coef.setter
     def coef(self, value):
         self._coef = value
-        if hasattr(self, 'ccoef_fmap'):
+        if hasattr(self, "ccoef_fmap"):
             del self.ccoef_fmap
-        if hasattr(self, 'imap'):
+        if hasattr(self, "imap"):
             del self.imap
 
     def __neg__(self):
@@ -71,9 +72,11 @@ class SimpleFunction(Terms):
 
     def __repr__(self):
         n = 3
+
         def to_str(i):
-            return '{}*({}, {})'.format(*i)
-        l = list(map(to_str, islice(self.iter_nonzero_triples(), n+1)))
-        if len(l) == n+1:
-            l[-1] = '...'
+            return "{}*({}, {})".format(*i)
+
+        l = list(map(to_str, islice(self.iter_nonzero_triples(), n + 1)))
+        if len(l) == n + 1:
+            l[-1] = "..."
         return f"{type(self).__name__}({' + '.join(l)})"
