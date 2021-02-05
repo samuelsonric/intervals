@@ -4,6 +4,7 @@ from numpy import array, float64
 from itertools import islice
 from bisect import bisect
 
+
 class SimpleFunction(IterTermsAlgebra):
     def __init__(self, mat):
         self.mat = mat
@@ -36,4 +37,3 @@ class SimpleFunction(IterTermsAlgebra):
 
     def __neg__(self):
         return type(self)(self.mat * (-1, 0))
-

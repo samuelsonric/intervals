@@ -5,9 +5,10 @@ from math import inf
 from numpy import array, float64
 from collections import deque
 
+
 class Intervals(IterTermsLattice):
-    repr_pat = '({1}, {2})'
-    repr_sep = ', '
+    repr_pat = "({1}, {2})"
+    repr_sep = ", "
 
     def __init__(self, parity, endpoints):
         self.parity = bool(parity)

@@ -10,9 +10,10 @@ from intervals.iterable import (
 )
 from operator import mul, neg, add, sub
 
+
 class IterTerms:
-    repr_pat = '{}*({}, {})'
-    repr_sep = ' + '
+    repr_pat = "{}*({}, {})"
+    repr_sep = " + "
     repr_num = 3
 
     def iter_terms(self):
@@ -36,9 +37,10 @@ class IterTerms:
             if n < self.repr_num:
                 l.append(self.repr_pat.format(*i))
             else:
-                l.append('...')
+                l.append("...")
                 break
-        return f'{type(self).__name__}({self.repr_sep.join(l)})'
+        return f"{type(self).__name__}({self.repr_sep.join(l)})"
+
 
 class IterTermsLattice(IterTerms, Poset):
     @classmethod
@@ -50,23 +52,34 @@ class IterTermsLattice(IterTerms, Poset):
         return cls.from_terms(terms_of_triples(iter(triples)))
 
     def __and__(self, other):
-        return self.from_terms(pointwise_binary(min, self.iter_terms(), other.iter_terms()))
+        return self.from_terms(
+            pointwise_binary(min, self.iter_terms(), other.iter_terms())
+        )
 
     def __or__(self, other):
-        return self.from_terms(pointwise_binary(max, self.iter_terms(), other.iter_terms()))
+        return self.from_terms(
+            pointwise_binary(max, self.iter_terms(), other.iter_terms())
+        )
 
     def __mul__(self, other):
-        return self.from_terms(pointwise_binary(mul, self.iter_terms(), other.iter_terms()))
+        return self.from_terms(
+            pointwise_binary(mul, self.iter_terms(), other.iter_terms())
+        )
 
     def __le__(self, other):
         return self == self & other
+
 
 class IterTermsAlgebra(IterTermsLattice):
     def __neg__(self, other):
         return self.from_terms(pointwise_unary(neg, self.iter_terms()))
 
     def __add__(self, other):
-        return self.from_terms(pointwise_binary(add, self.iter_terms(), other.iter_terms()))
+        return self.from_terms(
+            pointwise_binary(add, self.iter_terms(), other.iter_terms())
+        )
 
     def __sub__(self, other):
-        return self.from_terms(pointwise_binary(sub, self.iter_terms(), other.iter_terms()))
+        return self.from_terms(
+            pointwise_binary(sub, self.iter_terms(), other.iter_terms())
+        )

@@ -4,6 +4,7 @@ from numpy import unique, array, fromiter, maximum, minimum, float64
 from collections import OrderedDict
 from bisect import bisect_left
 
+
 class CompositeFunction(IterTerms):
     def __init__(self, left, right):
         self.left = left

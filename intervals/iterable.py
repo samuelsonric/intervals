@@ -10,12 +10,14 @@ def eq(x, y):
 def call(val, x):
     def filt(i):
         return i[1] <= val < i[2]
+
     return next(filter(filt, triples_of_terms(x)))
 
 
 def triples_of_terms(x):
     filt = lambda x: x[0]
     yield from filter(filt, triples_of_terms0(x))
+
 
 def triples_of_terms0(x):
     i = next(x)
