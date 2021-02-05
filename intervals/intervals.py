@@ -1,15 +1,20 @@
-from intervals.simple_function import IntegrableFunctionLattice
-from intervals.constants import MAX_REPR
-from itertools import cycle, chain, islice
-from collections import deque
+from intervals.terms import IterTermsLattice
+from itertools import cycle, chain, islice, zip_longest
+from bisect import bisect
 from math import inf
 from numpy import array, float64
+from collections import deque
 
+class Intervals(IterTermsLattice):
+    repr_pat = '({1}, {2})'
+    repr_sep = ', '
 
-class Intervals(IntegrableFunctionLattice):
     def __init__(self, parity, endpoints):
         self.parity = bool(parity)
         self.endpoints = array(endpoints, float64)
+
+    def __call__(self, x):
+        return self.parity == bisect(self.endpoints, x) % 2
 
     @classmethod
     def from_terms(cls, terms):
@@ -18,11 +23,9 @@ class Intervals(IntegrableFunctionLattice):
 
     @classmethod
     def from_endpoints(cls, endpoints):
-        ep = deque(endpoints) or deque((-inf,))
-        if not (p := (-inf == ep[0])):
+        ep = deque(endpoints)
+        if not (p := (ep and -inf == ep[0])):
             ep.appendleft(-inf)
-        if ep[-1] == inf:
-            ep.pop()
         return cls(p, ep)
 
     @classmethod
@@ -30,11 +33,12 @@ class Intervals(IntegrableFunctionLattice):
         return cls.from_endpoints(chain.from_iterable(pairs))
 
     def iter_terms(self):
-        p = self.parity
-        yield from zip(cycle((p, not p)), self.endpoints)
+        c = cycle((self.parity, not self.parity))
+        yield from zip(c, self.endpoints)
 
     def iter_pairs(self):
-        yield from map(lambda x: x[1:], self.iter_nonzero_triples())
+        ep = islice(self.endpoints, not self.parity, None)
+        yield from zip_longest(ep, ep, fillvalue=inf)
 
     def __invert__(self):
         return type(self)(not self.parity, self.endpoints)
@@ -47,9 +51,3 @@ class Intervals(IntegrableFunctionLattice):
 
     def __eq__(self, other):
         return self.parity == other.parity and all(self.endpoints == other.endpoints)
-
-    def __repr__(self):
-        l = list(map(str, islice(self.iter_pairs(), MAX_REPR + 1)))
-        if len(l) == MAX_REPR + 1:
-            l[-1] = "..."
-        return f"{type(self).__name__}({', '.join(l)})"

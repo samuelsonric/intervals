@@ -1,38 +1,8 @@
-from itertools import takewhile, dropwhile
-import matplotlib.pyplot as plt
-from itertools import cycle
+from matplotlib.pyplot import step
 
+def plot_terms(x, color='b'):
+    b, a = zip(*x)
+    return step(a, b, color, where='post')
 
-def get_bar_inputs(sfunc, start, stop):
-    def mapper(i):
-        return (i[0], i[1], i[2] - i[1])
-
-    tfilt = lambda i: i[1] < stop
-    dfilt = lambda i: i[2] <= start
-
-    g = map(mapper, takewhile(tfilt, dropwhile(dfilt, sfunc.iter_triples())))
-
-    height, x, width = map(list, zip(*g))
-
-    x[0] = start
-    width[0] = x[1] - start
-    width[-1] = stop - x[-1]
-
-    return (x, height, width)
-
-
-def plot_sfuncs(
-    *sfuncs,
-    xlim=(-10, 10),
-    ylim=None,
-    figsize=(4, 3),
-    colors=("b", "g", "r", "c", "m", "y", "k"),
-):
-    plt.figure(figsize=figsize)
-    for x, c in zip(sfuncs, cycle(colors)):
-        plt.bar(*get_bar_inputs(x, *xlim), color=c, align="edge")
-    plt.xlim(xlim)
-    if ylim is not None:
-        plt.ylim(ylim)
-
-    plt.show()
+def plot_simple_function(sfun, color='b'):
+    return step(sfun.mat[:, 1], sfun.mat[:, 0], color, where='post')

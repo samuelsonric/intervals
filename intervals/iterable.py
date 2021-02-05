@@ -7,11 +7,34 @@ def eq(x, y):
     return all(i == j for i, j in zip_longest(x, y))
 
 
-def triples(x):
+def call(val, x):
+    def filt(i):
+        return i[1] <= val < i[2]
+    return next(filter(filt, triples_of_terms(x)))
+
+
+def triples_of_terms(x):
+    filt = lambda x: x[0]
+    yield from filter(filt, triples_of_terms0(x))
+
+def triples_of_terms0(x):
     i = next(x)
     for j in x:
-        yield (*i, (i := j)[1])
+        yield (*i, j[1])
+        i = j
     yield (*i, inf)
+
+
+def terms_of_triple(i):
+    yield (i[0], i[1])
+    if i[2] < inf:
+        yield (0, i[2])
+
+
+def terms_of_triples(x):
+    i = next(x, (0, -inf, inf))
+    yield from terms_of_triple(i)
+    yield from map(terms_of_triple, x)
 
 
 def leb_of_triple(i):
@@ -19,7 +42,7 @@ def leb_of_triple(i):
 
 
 def leb(x):
-    return sum(map(leb_of_triple, triples(x)))
+    return sum(map(leb_of_triple, triples_of_terms(x)))
 
 
 def reduce_terms(x):

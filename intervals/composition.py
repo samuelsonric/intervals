@@ -1,57 +1,56 @@
-from intervals.terms import IntegrableFunction
+from intervals.terms import IterTerms
 from intervals.simple_function import SimpleFunction
 from numpy import unique, array, fromiter, maximum, minimum, float64
+from collections import OrderedDict
+from bisect import bisect_left
 
-class Composition(IntegrableFunction):
-    def __init__(self, sfun, coef):
-        self.sfun = sfun
-        self.coef = array(coef, float64)
+class CompositeFunction(IterTerms):
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
+    def __call__(self, x):
+        return self.left[self.right(x)]
 
     @classmethod
-    def from_sfun(cls, sfun):
-        return cls(sfun, sfun.ccoef)
+    def from_array(cls, left, right):
+        return cls(array(left, dtype=float64), right)
+
+    @classmethod
+    def from_simple_function(cls, sfun):
+        left = OrderedDict()
+        right = []
+        for i in sfun.mat:
+            right.append((left.setdefault(i[0], len(left)), i[1]))
+        return cls.from_array(tuple(left), SimpleFunction.from_array(right))
 
     def iter_terms(self):
-        yield from zip(map(self.coef.__getitem__, self.fmap), self.endpoints)
-
-    @property
-    def endpoints(self):
-        return self.sfunc.endpoints
-
-    @property
-    def fmap(self):
-        return self.sfunc.fmap
-
-    @property
-    def imap(self):
-        return self.sfunc.imap
+        for i in self.right.iter_terms():
+            yield (self.left[int(i[0])], i[1])
 
     def __neg__(self):
-        return self.from_coef(self.sfunc, -self.coef)
+        return type(self)(-self.left, self.right)
 
     def __add__(self, other):
-        return self.from_coef(self.sfunc, self.coef + other.coef)
+        return type(self)(self.left + other.left, self.right)
 
     def __sub__(self, other):
-        return self.from_coef(self.sfunc, self.coef - other.coef)
+        return type(self)(self.left - other.left, self.right)
 
     def __mul__(self, other):
-        return self.from_coef(self.sfunc, self.coef * other.coef)
+        return type(self)(self.left * other.left, self.right)
 
     def __or__(self, other):
-        return self.from_coef(self.sfunc, maximum(self.coef, other.coef))
+        return type(self)(maximum(self.left, other.left), self.right)
 
     def __and__(self, other):
-        return self.from_coef(self.sfunc, minimum(self.coef, other.coef))
+        return type(self)(minimum(self.left, other.left), self.right)
 
     def __eq__(self, other):
-        return all(self.coef == other.coef)
+        return all(self.left == other.left)
 
     def __le__(self, other):
-        return all(self.coef <= other.coef)
+        return all(self.left <= other.left)
 
     def __lt__(self, other):
-        return all(self.coef < other.coef)
-
-    def __repr__(self):
-        return f'{type(self).__name__}({repr(self.coef)})'
+        return all(self.left < other.left)
