@@ -7,7 +7,6 @@ from operator import mul, add, sub
 from functools import cached_property
 from itertools import islice, cycle
 
-
 class SimpleFunction(IntegrableFunctionLattice):
     def __init__(self, coef, endpoints):
         self.coef = array(coef, dtype=float64)
@@ -18,18 +17,16 @@ class SimpleFunction(IntegrableFunctionLattice):
         return cls(*zip(*terms))
 
     @classmethod
-    def approx(cls, fun, start, stop, num_steps):
+    def from_callable(cls, fun, start, stop, num_steps):
         return cls.from_terms(approx(fun, start, stop, num_steps))
 
     @classmethod
-    def indicator(cls, intervals):
-        p = intervals.parity
-        return cls(
-            fromiter(
-                islice(cycle((p, not p)), len(intervals.endpoints)), dtype=float64
-            ),
-            intervals.endpoints,
-        )
+    def from_intervals(cls, intervals):
+        return cls.from_terms(intervals.iter_terms())
+
+    @classmethod
+    def from_composition(cls, composition):
+        return cls.from_terms(composition.iter_terms())
 
     def iter_terms(self):
         yield from zip(self.coef, self.endpoints)
