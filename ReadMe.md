@@ -67,32 +67,32 @@ y = SimpleFunction.from_function(fun=lambda x: 0.1*(x-5)**2, start=0, stop=10, n
 SimpleFunction(1.0*(1.0, 3.0) + 1.0*(4.0, 7.0) + 1.0*(8.0, 9.0))
 ```
 
-![](01.png)
+![](./media/01.png)
 #### approximation of the function x ↦ 0.1(x − 5)^2
 ```
 >>> y
 SimpleFunction(2.5*(0.0, 0.5) + 2.025*(0.5, 1.0) + 1.6*(1.0, 1.5) + ...)
 ```
-![](02.png)
+![](./media/02.png)
 ### Operations
 #### multiplication
 ```
 >>> x * y
 SimpleFunction(1.6*(1.0, 1.5) + 1.225*(1.5, 2.0) + 0.9*(2.0, 2.5) + ...)
 ```
-![](03.png)
+![](./media/03.png)
 #### addition
 ```
 >>> x + y
 SimpleFunction(2.5*(0.0, 0.5) + 2.025*(0.5, 1.0) + 2.6*(1.0, 1.5) + ...)
 ```
-![](04.png)
+![](./media/04.png)
 #### pointwise minimum
 ```
 >>> x & y
 SimpleFunction(1.0*(1.0, 2.0) + 0.9*(2.0, 2.5) + 0.625*(2.5, 3.0) + ...)
 ```
-![](05.png)
+![](./media/05.png)
 #### list of operations
 ```
 -x     # negation
